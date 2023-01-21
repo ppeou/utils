@@ -17,3 +17,13 @@ const creator = ({ format, mapper } = {}) => {
 };
 export default creator;
 //module.exports = creator;
+
+
+//another implementation
+function create(template) {
+  const fields = template.match(/\$\{\w+\}/g).map(v => v.match(/\w+/)[0]);
+  return new Function(`{${fields.join(",")}}`, "return `" + template + "`;");
+}
+
+const t3Closure = create("I'm ${name}. I'm almost ${age} years old.");
+console.log(t3Closure({ name: "MDN", age: 30 })); // I'm MDN. I'm almost 30 years old.
